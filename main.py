@@ -3,6 +3,7 @@ import numpy as np
 
 taille_grille_x = 20
 taille_grille_y = 20
+tours = 10
 
 def print_state(grid) :
     for x in range(0, taille_grille_x) :
@@ -12,8 +13,9 @@ def print_state(grid) :
             else :
                 print('□', end=' ')
         print('')
+    print('')
 
-def ajouter_stable(grille):
+def ajouter_patern(grille):
     
     patern = [
         [1],
@@ -25,7 +27,7 @@ def ajouter_stable(grille):
         for y in range(0, len(patern[x])) :
            grille[math.floor(taille_grille_x / 2) + x][math.floor(taille_grille_y / 2) + y] = patern[x][y]
 
-def get_neighbord_count(grid, targetX, targetY):
+def nombre_de_voisins(grid, targetX, targetY):
     count = 0
     for x in range(-1, 2) :
         for y in range(-1, 2) :
@@ -43,10 +45,10 @@ def get_neighbord_count(grid, targetX, targetY):
 
     return count
 
-def calculate_next_state(grid, next_grid):
+def calculer_prochain_etat(grid, next_grid):
     for x in range(0, taille_grille_x) :
         for y in range(0, taille_grille_y) :
-            neightbord_count = get_neighbord_count(grid, x, y) 
+            neightbord_count = nombre_de_voisins(grid, x, y) 
             if (grid[x][y] == 1) :
                 if (neightbord_count < 2 or neightbord_count > 3) :
                      next_grid[x][y] = 0
@@ -58,19 +60,15 @@ def calculate_next_state(grid, next_grid):
                 else:
                     next_grid[x][y] = 0
 
-def loop() :
-    tours = 10
-    i = 0
+def boucle() :
     grille = np.zeros((taille_grille_x, taille_grille_y), dtype=int)
     next_grille = np.zeros((taille_grille_x, taille_grille_y), dtype=int)
-    ajouter_stable(grille)
+    ajouter_patern(grille)
 
-    while(i < tours) :
+    for _ in range(tours):
         print_state(grille)
-        calculate_next_state(grille, next_grille)
+        calculer_prochain_etat(grille, next_grille)
         grille = np.copy(next_grille)
-        print('')
-        i += 1
 
-loop()
+boucle()
 
